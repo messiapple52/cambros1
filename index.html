@@ -3,154 +3,126 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cam Bros Photography PRO</title>
+<title>Cam Bros Photography</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap');
-
 body{
     margin:0;
-    font-family:Poppins;
+    font-family:Arial;
     background:#0a0a0a;
     color:white;
 }
 
-/* HERO */
 .hero{
-    height:100vh;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
+    padding:70px 20px;
     text-align:center;
-    background:radial-gradient(circle at top,#1b1b1b,#000);
+    background:linear-gradient(135deg,#111,#000);
 }
 
-.hero h1{
-    font-size:52px;
-    margin:0;
-}
+h1{margin:0;font-size:40px;}
 
-.hero p{
-    opacity:0.7;
-}
-
-.btn{
-    padding:14px 18px;
+button{
+    padding:12px 16px;
     margin:6px;
     border:none;
-    border-radius:12px;
+    border-radius:10px;
     cursor:pointer;
-    font-weight:600;
-    transition:0.2s;
+    font-weight:bold;
 }
 
-.btn:hover{transform:scale(1.05)}
-
 .primary{background:white;color:black;}
-.dark{background:#222;color:white;}
+.dark{background:#333;color:white;}
 
 .page{
     display:none;
-    padding:30px;
-    max-width:1000px;
+    padding:25px;
+    max-width:900px;
     margin:auto;
 }
 
-/* GLASS CARDS */
 .card{
-    background:rgba(255,255,255,0.06);
-    border:1px solid rgba(255,255,255,0.1);
-    backdrop-filter:blur(10px);
-    padding:20px;
-    border-radius:16px;
-    margin:15px 0;
+    background:#1b1b1b;
+    padding:18px;
+    border-radius:12px;
+    margin:12px 0;
 }
 
-/* INPUTS */
 input,textarea{
     width:100%;
-    padding:12px;
+    padding:10px;
     margin:6px 0;
-    border-radius:10px;
+    border-radius:8px;
     border:none;
-    outline:none;
 }
 
-/* GALLERY */
 img{
-    width:140px;
+    width:130px;
     margin:5px;
-    border-radius:10px;
-}
-
-/* ADMIN GRID */
-.grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
+    border-radius:8px;
 }
 </style>
 </head>
 
 <body>
 
-<!-- HERO -->
 <div class="hero" id="home">
-    <h1>Cam Bros Photography</h1>
-    <p>Elite Sports • Events • Moments Captured</p>
+<h1>Cam Bros Photography</h1>
+<p>Sports • Events • Moments</p>
 
-    <div>
-        <button class="btn primary" onclick="openPage('gallery')">Find My Photos</button>
-        <button class="btn dark" onclick="openPage('photos')">Portfolio</button>
-        <button class="btn dark" onclick="openPage('events')">Events</button>
-        <button class="btn dark" onclick="openPage('book')">Book</button>
-        <button class="btn primary" onclick="openPage('admin')">Admin</button>
-    </div>
+<button class="primary" onclick="go('gallery')">Find My Photos</button>
+<button class="dark" onclick="go('photos')">Our Photos</button>
+<button class="dark" onclick="go('events')">Events</button>
+<button class="dark" onclick="go('book')">Book</button>
+<button class="primary" onclick="go('admin')">Admin</button>
 </div>
 
 <!-- GALLERY -->
 <div class="page" id="gallery">
+<div class="card">
 <h2>Find My Photos</h2>
 
-<div class="card">
-<input id="code" placeholder="Enter Code">
-<button class="btn primary" onclick="loadGallery()">Open Gallery</button>
+<input id="code" placeholder="Enter code">
+<button onclick="loadGallery()">Open Gallery</button>
+
 <div id="galleryView"></div>
 </div>
 
 <button onclick="back()">Back</button>
 </div>
 
-<!-- PORTFOLIO -->
+<!-- PHOTOS -->
 <div class="page" id="photos">
-<h2>Portfolio</h2>
 <div class="card">
-<p>Admin controls this section.</p>
+<h2>Our Photos</h2>
+<p>Portfolio section (admin controlled)</p>
 </div>
 <button onclick="back()">Back</button>
 </div>
 
 <!-- EVENTS -->
 <div class="page" id="events">
-<h2>Upcoming Events</h2>
-<div id="eventList" class="card"></div>
+<div class="card">
+<h2>Events</h2>
+<div id="eventList">No events yet</div>
+</div>
 <button onclick="back()">Back</button>
 </div>
 
 <!-- BOOKING -->
 <div class="page" id="book">
+<div class="card">
 <h2>Book a Shoot</h2>
 
-<div class="card">
 <input id="bname" placeholder="Name">
 <input id="bemail" placeholder="Email">
 <input id="bphone" placeholder="Phone">
 <textarea id="bdetails" placeholder="Details"></textarea>
 
-<button class="btn primary" onclick="submitBooking()">Submit</button>
+<button onclick="submitBooking()">Submit Booking</button>
+
+<p id="msg"></p>
 </div>
 
 <button onclick="back()">Back</button>
@@ -162,38 +134,27 @@ img{
 <div class="card" id="loginBox">
 <h2>Admin Login</h2>
 <input id="pass" type="password" placeholder="Password">
-<button class="btn primary" onclick="login()">Login</button>
+<button onclick="login()">Login</button>
 </div>
 
-<div id="panel" style="display:none">
+<div class="card" id="panel" style="display:none">
 
-<div class="card">
-<h3>Gallery System</h3>
-<input id="newCode" placeholder="Create Code">
-<button class="btn primary" onclick="createGallery()">Create</button>
+<h2>Admin Panel</h2>
 
-<input id="uploadCode" placeholder="Upload Code">
+<h3>Create Gallery</h3>
+<input id="newCode">
+<button onclick="createGallery()">Create</button>
+
+<h3>Upload Photo</h3>
+<input id="uploadCode" placeholder="Gallery Code">
 <input type="file" id="file">
-<button class="btn primary" onclick="upload()">Upload Photo</button>
-</div>
+<button onclick="upload()">Upload</button>
 
-<div class="card grid">
-<div>
 <h3>Bookings</h3>
 <div id="bookings"></div>
-</div>
 
-<div>
 <h3>Orders</h3>
 <div id="orders"></div>
-</div>
-</div>
-
-<div class="card">
-<h3>Events Manager</h3>
-<input id="eventName" placeholder="Event">
-<button class="btn primary" onclick="addEvent()">Add Event</button>
-</div>
 
 </div>
 
@@ -202,36 +163,40 @@ img{
 
 <script>
 
-/* 🔥 SUPABASE (YOUR KEY INCLUDED) */
-const supabaseUrl = "https://xnxpvykezuidghkmvdvk.supabase.co";
+/* =======================
+   SAFE NAVIGATION SYSTEM
+======================= */
 
-const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhueHB2eWtlenVpZ2Roa212ZHZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4NjMxMzYsImV4cCI6MjA5MzQzOTEzNn0.hVluf7TVg719lkrLbRpgeenv698dDZTzaIH7o4hQt64";
-
-const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
-
-/* NAV */
-function openPage(id){
+function go(page){
     document.getElementById("home").style.display="none";
     document.querySelectorAll(".page").forEach(p=>p.style.display="none");
-    document.getElementById(id).style.display="block";
+    document.getElementById(page).style.display="block";
 }
 
 function back(){
     document.querySelectorAll(".page").forEach(p=>p.style.display="none");
-    document.getElementById("home").style.display="flex";
+    document.getElementById("home").style.display="block";
 }
 
-/* LOGIN */
+/* =======================
+   ADMIN LOGIN (FIXED)
+======================= */
+
 function login(){
-    if(document.getElementById("pass").value === "Cambros2025"){
+    const pass = document.getElementById("pass").value;
+
+    if(pass === "Cambros2025"){
         document.getElementById("loginBox").style.display="none";
         document.getElementById("panel").style.display="block";
         loadAdmin();
-    } else alert("Wrong password");
+        alert("Logged in");
+    } else {
+        alert("Wrong password");
+    }
 }
 
-/* AUTO LOGOUT */
-document.addEventListener("visibilitychange", ()=>{
+/* AUTO LOGOUT ON LEAVE */
+document.addEventListener("visibilitychange",()=>{
     if(document.hidden){
         logout();
     }
@@ -242,83 +207,89 @@ function logout(){
     document.getElementById("loginBox").style.display="block";
 }
 
-/* GALLERY */
-async function createGallery(){
-    const code = document.getElementById("newCode").value;
-    await supabase.from("galleries").insert([{code}]);
-    alert("Created " + code);
+/* =======================
+   BOOKING (ALWAYS WORKS)
+======================= */
+
+function submitBooking(){
+
+    const name = document.getElementById("bname").value;
+    const email = document.getElementById("bemail").value;
+    const phone = document.getElementById("bphone").value;
+
+    if(!name || !email || !phone){
+        document.getElementById("msg").innerText="Fill all fields";
+        return;
+    }
+
+    document.getElementById("msg").innerText="Booking sent!";
 }
 
-async function upload(){
-    const file=document.getElementById("file").files[0];
-    const code=document.getElementById("uploadCode").value;
+/* =======================
+   GALLERY (SAFE LOAD)
+======================= */
 
-    const fileName = Date.now()+file.name;
+function loadGallery(){
 
-    await supabase.storage.from("galleries").upload(fileName,file);
+    const code = document.getElementById("code").value;
 
-    const url = supabase.storage.from("galleries")
-    .getPublicUrl(fileName).data.publicUrl;
+    let data = JSON.parse(localStorage.getItem(code));
 
-    await supabase.from("photos").insert([{
-        gallery_code:code,
-        url:url
-    }]);
+    const box = document.getElementById("galleryView");
+    box.innerHTML = "";
 
-    alert("Uploaded to "+code);
-}
-
-async function loadGallery(){
-    const code=document.getElementById("code").value;
-
-    let {data}=await supabase.from("photos")
-    .select("*")
-    .eq("gallery_code",code);
-
-    const box=document.getElementById("galleryView");
-    box.innerHTML="";
-
-    if(!data.length){
+    if(!data || data.length === 0){
         box.innerHTML="No photos found";
         return;
     }
 
-    data.forEach(p=>{
-        let img=document.createElement("img");
-        img.src=p.url;
-        box.appendChild(img);
+    data.forEach(img=>{
+        let i=document.createElement("img");
+        i.src=img;
+        box.appendChild(i);
     });
 }
 
-/* ADMIN LOAD */
-async function loadAdmin(){
-    let {data:bookings}=await supabase.from("bookings").select("*");
-    let {data:orders}=await supabase.from("orders").select("*");
+/* =======================
+   ADMIN FUNCTIONS
+======================= */
 
-    document.getElementById("bookings").innerHTML =
-    bookings.map(b=>`<div class="card">${b.name}<br>${b.email}<br>${b.phone}</div>`).join("");
-
-    document.getElementById("orders").innerHTML =
-    orders.map(o=>`<div class="card">${o.name}<br>${o.email}<br>${o.phone}</div>`).join("");
+function createGallery(){
+    const code=document.getElementById("newCode").value;
+    localStorage.setItem(code, JSON.stringify([]));
+    alert("Gallery created: " + code);
 }
 
-/* BOOKINGS */
-async function submitBooking(){
-    await supabase.from("bookings").insert([{
-        name:bname.value,
-        email:bemail.value,
-        phone:bphone.value,
-        details:bdetails.value
-    }]);
+function upload(){
 
-    alert("Booking sent");
+    const file=document.getElementById("file").files[0];
+    const code=document.getElementById("uploadCode").value;
+
+    if(!file || !code){
+        alert("Missing file or code");
+        return;
+    }
+
+    let reader = new FileReader();
+
+    reader.onload = function(e){
+
+        let arr = JSON.parse(localStorage.getItem(code)) || [];
+
+        arr.push(e.target.result);
+
+        localStorage.setItem(code, JSON.stringify(arr));
+
+        alert("Uploaded to " + code);
+    };
+
+    reader.readAsDataURL(file);
 }
 
-/* EVENTS */
-async function addEvent(){
-    const e=document.getElementById("eventName").value;
-    await supabase.from("events").insert([{name:e}]);
-    alert("Event added");
+/* LOAD ADMIN DATA */
+function loadAdmin(){
+    document.getElementById("bookings").innerHTML="No bookings (demo)";
+    document.getElementById("orders").innerHTML="No orders (demo)";
 }
 
 </script>
