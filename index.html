@@ -3,25 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cam Bros Photography</title>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<title>Cam Bros Photography PRO</title>
 
 <style>
 body{
     margin:0;
     font-family:Arial;
-    background:#0a0a0a;
+    background:#0b0b0b;
     color:white;
 }
 
 .hero{
-    padding:70px 20px;
     text-align:center;
+    padding:70px 20px;
     background:linear-gradient(135deg,#111,#000);
 }
-
-h1{margin:0;font-size:40px;}
 
 button{
     padding:12px 16px;
@@ -43,10 +39,17 @@ button{
 }
 
 .card{
-    background:#1b1b1b;
-    padding:18px;
+    background:#1c1c1c;
+    padding:15px;
     border-radius:12px;
     margin:12px 0;
+}
+
+img{
+    width:130px;
+    margin:5px;
+    border-radius:8px;
+    cursor:pointer;
 }
 
 input,textarea{
@@ -57,25 +60,36 @@ input,textarea{
     border:none;
 }
 
-img{
-    width:130px;
-    margin:5px;
-    border-radius:8px;
+/* POPUP ORDER */
+#popup{
+    position:fixed;
+    top:0;left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.85);
+    display:none;
+    justify-content:center;
+    align-items:center;
+}
+
+.popupBox{
+    background:#222;
+    padding:20px;
+    border-radius:12px;
+    width:300px;
 }
 </style>
 </head>
 
 <body>
 
+<!-- HOME -->
 <div class="hero" id="home">
 <h1>Cam Bros Photography</h1>
-<p>Sports • Events • Moments</p>
 
-<button class="primary" onclick="go('gallery')">Find My Photos</button>
-<button class="dark" onclick="go('photos')">Our Photos</button>
-<button class="dark" onclick="go('events')">Events</button>
-<button class="dark" onclick="go('book')">Book</button>
-<button class="primary" onclick="go('admin')">Admin</button>
+<button onclick="go('gallery')">Find My Photos</button>
+<button onclick="go('book')">Book</button>
+<button onclick="go('admin')">Admin</button>
 </div>
 
 <!-- GALLERY -->
@@ -83,30 +97,12 @@ img{
 <div class="card">
 <h2>Find My Photos</h2>
 
-<input id="code" placeholder="Enter code">
-<button onclick="loadGallery()">Open Gallery</button>
+<input id="code" placeholder="Enter Gallery Code">
+<button onclick="openGallery()">Open Gallery</button>
 
 <div id="galleryView"></div>
 </div>
 
-<button onclick="back()">Back</button>
-</div>
-
-<!-- PHOTOS -->
-<div class="page" id="photos">
-<div class="card">
-<h2>Our Photos</h2>
-<p>Portfolio section (admin controlled)</p>
-</div>
-<button onclick="back()">Back</button>
-</div>
-
-<!-- EVENTS -->
-<div class="page" id="events">
-<div class="card">
-<h2>Events</h2>
-<div id="eventList">No events yet</div>
-</div>
 <button onclick="back()">Back</button>
 </div>
 
@@ -118,13 +114,11 @@ img{
 <input id="bname" placeholder="Name">
 <input id="bemail" placeholder="Email">
 <input id="bphone" placeholder="Phone">
-<textarea id="bdetails" placeholder="Details"></textarea>
 
 <button onclick="submitBooking()">Submit Booking</button>
 
 <p id="msg"></p>
 </div>
-
 <button onclick="back()">Back</button>
 </div>
 
@@ -133,27 +127,31 @@ img{
 
 <div class="card" id="loginBox">
 <h2>Admin Login</h2>
-<input id="pass" type="password" placeholder="Password">
+<p>Enter password to access dashboard</p>
+<input id="pass" type="password">
 <button onclick="login()">Login</button>
 </div>
 
 <div class="card" id="panel" style="display:none">
 
-<h2>Admin Panel</h2>
+<h2>ADMIN DASHBOARD</h2>
+<p>Welcome. Manage galleries, bookings, and orders.</p>
 
-<h3>Create Gallery</h3>
+<h3>Create Gallery Code</h3>
 <input id="newCode">
 <button onclick="createGallery()">Create</button>
 
-<h3>Upload Photo</h3>
-<input id="uploadCode" placeholder="Gallery Code">
+<h3>Upload Photo to Code</h3>
+<input id="uploadCode">
 <input type="file" id="file">
 <button onclick="upload()">Upload</button>
 
-<h3>Bookings</h3>
+<hr>
+
+<h3>BOOKINGS</h3>
 <div id="bookings"></div>
 
-<h3>Orders</h3>
+<h3>ORDERS</h3>
 <div id="orders"></div>
 
 </div>
@@ -161,11 +159,25 @@ img{
 <button onclick="logout()">Logout</button>
 </div>
 
+<!-- ORDER POPUP -->
+<div id="popup">
+<div class="popupBox">
+<h3>Place Order</h3>
+
+<input id="orderName" placeholder="Name">
+<input id="orderEmail" placeholder="Email">
+<input id="orderPhone" placeholder="Phone">
+
+<button onclick="submitOrder()">Place Order</button>
+<button onclick="closePopup()">Close</button>
+</div>
+</div>
+
 <script>
 
-/* =======================
-   SAFE NAVIGATION SYSTEM
-======================= */
+/* =========================
+NAVIGATION (FIXED)
+========================= */
 
 function go(page){
     document.getElementById("home").style.display="none";
@@ -178,92 +190,157 @@ function back(){
     document.getElementById("home").style.display="block";
 }
 
-/* =======================
-   ADMIN LOGIN (FIXED)
-======================= */
+/* =========================
+ADMIN LOGIN
+========================= */
 
 function login(){
-    const pass = document.getElementById("pass").value;
-
-    if(pass === "Cambros2025"){
+    if(document.getElementById("pass").value==="Cambros2025"){
         document.getElementById("loginBox").style.display="none";
         document.getElementById("panel").style.display="block";
         loadAdmin();
-        alert("Logged in");
-    } else {
-        alert("Wrong password");
-    }
+    } else alert("Wrong password");
 }
 
-/* AUTO LOGOUT ON LEAVE */
-document.addEventListener("visibilitychange",()=>{
-    if(document.hidden){
-        logout();
-    }
-});
-
+/* FULL LOGOUT FIX */
 function logout(){
+
+    // reset admin UI
     document.getElementById("panel").style.display="none";
     document.getElementById("loginBox").style.display="block";
+
+    // clear inputs
+    document.getElementById("pass").value="";
+
+    // go home
+    back();
 }
 
-/* =======================
-   BOOKING (ALWAYS WORKS)
-======================= */
+/* =========================
+GALLERY SYSTEM
+========================= */
 
-function submitBooking(){
-
-    const name = document.getElementById("bname").value;
-    const email = document.getElementById("bemail").value;
-    const phone = document.getElementById("bphone").value;
-
-    if(!name || !email || !phone){
-        document.getElementById("msg").innerText="Fill all fields";
-        return;
-    }
-
-    document.getElementById("msg").innerText="Booking sent!";
-}
-
-/* =======================
-   GALLERY (SAFE LOAD)
-======================= */
-
-function loadGallery(){
+function openGallery(){
 
     const code = document.getElementById("code").value;
-
-    let data = JSON.parse(localStorage.getItem(code));
+    const data = JSON.parse(localStorage.getItem(code));
 
     const box = document.getElementById("galleryView");
-    box.innerHTML = "";
+    box.innerHTML="";
 
-    if(!data || data.length === 0){
-        box.innerHTML="No photos found";
+    if(!data || data.length===0){
+        box.innerHTML="No photos found. Make sure code exists and press OPEN.";
         return;
     }
 
     data.forEach(img=>{
         let i=document.createElement("img");
         i.src=img;
+
+        // CLICK PHOTO → OPEN ORDER POPUP
+        i.onclick = ()=>openOrderPopup(img);
+
         box.appendChild(i);
     });
 }
 
-/* =======================
-   ADMIN FUNCTIONS
-======================= */
+/* =========================
+ORDER SYSTEM (PHOTO CLICK)
+========================= */
+
+let selectedImage = "";
+
+function openOrderPopup(img){
+    selectedImage = img;
+    document.getElementById("popup").style.display="flex";
+}
+
+function closePopup(){
+    document.getElementById("popup").style.display="none";
+}
+
+function submitOrder(){
+
+    const name=document.getElementById("orderName").value;
+    const email=document.getElementById("orderEmail").value;
+    const phone=document.getElementById("orderPhone").value;
+
+    if(!name || !email || !phone){
+        alert("Fill all fields");
+        return;
+    }
+
+    let orders = JSON.parse(localStorage.getItem("orders")) || [];
+
+    orders.push({
+        name,email,phone,image:selectedImage
+    });
+
+    localStorage.setItem("orders",JSON.stringify(orders));
+
+    alert("Order placed!");
+
+    closePopup();
+}
+
+/* =========================
+BOOKINGS
+========================= */
+
+function submitBooking(){
+
+    const name=bname.value;
+    const email=bemail.value;
+    const phone=bphone.value;
+
+    let bookings = JSON.parse(localStorage.getItem("bookings")) || [];
+
+    bookings.push({name,email,phone});
+
+    localStorage.setItem("bookings",JSON.stringify(bookings));
+
+    msg.innerText="Booking submitted!";
+}
+
+/* =========================
+ADMIN DATA
+========================= */
+
+function loadAdmin(){
+
+    let bookings = JSON.parse(localStorage.getItem("bookings")) || [];
+    let orders = JSON.parse(localStorage.getItem("orders")) || [];
+
+    document.getElementById("bookings").innerHTML =
+    bookings.map(b=>
+        `<div class="card">
+        ${b.name}<br>${b.email}<br>${b.phone}
+        </div>`
+    ).join("");
+
+    document.getElementById("orders").innerHTML =
+    orders.map(o=>
+        `<div class="card">
+        ${o.name}<br>${o.email}<br>${o.phone}<br>
+        <small>Image attached</small>
+        </div>`
+    ).join("");
+}
+
+/* =========================
+CREATE / UPLOAD (LOCAL DEMO)
+========================= */
 
 function createGallery(){
-    const code=document.getElementById("newCode").value;
-    localStorage.setItem(code, JSON.stringify([]));
-    alert("Gallery created: " + code);
+    const code = newCode.value;
+    localStorage.setItem(code,JSON.stringify([]));
+    alert("Gallery created: "+code);
 }
 
 function upload(){
 
-    const file=document.getElementById("file").files[0];
-    const code=document.getElementById("uploadCode").value;
+    const file = document.getElementById("file").files[0];
+    const code = document.getElementById("uploadCode").value;
 
     if(!file || !code){
         alert("Missing file or code");
@@ -274,22 +351,14 @@ function upload(){
 
     reader.onload = function(e){
 
-        let arr = JSON.parse(localStorage.getItem(code)) || [];
-
-        arr.push(e.target.result);
-
-        localStorage.setItem(code, JSON.stringify(arr));
+        let data = JSON.parse(localStorage.getItem(code)) || [];
+        data.push(e.target.result);
+        localStorage.setItem(code,JSON.stringify(data));
 
         alert("Uploaded to " + code);
     };
 
     reader.readAsDataURL(file);
-}
-
-/* LOAD ADMIN DATA */
-function loadAdmin(){
-    document.getElementById("bookings").innerHTML="No bookings (demo)";
-    document.getElementById("orders").innerHTML="No orders (demo)";
 }
 
 </script>
