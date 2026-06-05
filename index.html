@@ -60,7 +60,7 @@ input,textarea{
     border:none;
 }
 
-/* POPUP ORDER */
+/* POPUP */
 #popup{
     position:fixed;
     top:0;left:0;
@@ -87,9 +87,35 @@ input,textarea{
 <div class="hero" id="home">
 <h1>Cam Bros Photography</h1>
 
+<button onclick="go('photos')">Our Photos</button>
+<button onclick="go('events')">Events</button>
 <button onclick="go('gallery')">Find My Photos</button>
 <button onclick="go('book')">Book</button>
 <button onclick="go('admin')">Admin</button>
+</div>
+
+<!-- OUR PHOTOS -->
+<div class="page" id="photos">
+<div class="card">
+<h2>Our Photos</h2>
+<p>Portfolio section (admin controlled later)</p>
+<img src="https://picsum.photos/200/140?1">
+<img src="https://picsum.photos/200/140?2">
+<img src="https://picsum.photos/200/140?3">
+<img src="https://picsum.photos/200/140?4">
+</div>
+<button onclick="back()">Back</button>
+</div>
+
+<!-- EVENTS -->
+<div class="page" id="events">
+<div class="card">
+<h2>Upcoming Events</h2>
+<ul id="eventList">
+<li>No events yet</li>
+</ul>
+</div>
+<button onclick="back()">Back</button>
 </div>
 
 <!-- GALLERY -->
@@ -106,7 +132,7 @@ input,textarea{
 <button onclick="back()">Back</button>
 </div>
 
-<!-- BOOKING -->
+<!-- BOOK -->
 <div class="page" id="book">
 <div class="card">
 <h2>Book a Shoot</h2>
@@ -116,7 +142,6 @@ input,textarea{
 <input id="bphone" placeholder="Phone">
 
 <button onclick="submitBooking()">Submit Booking</button>
-
 <p id="msg"></p>
 </div>
 <button onclick="back()">Back</button>
@@ -127,21 +152,19 @@ input,textarea{
 
 <div class="card" id="loginBox">
 <h2>Admin Login</h2>
-<p>Enter password to access dashboard</p>
 <input id="pass" type="password">
 <button onclick="login()">Login</button>
 </div>
 
 <div class="card" id="panel" style="display:none">
 
-<h2>ADMIN DASHBOARD</h2>
-<p>Welcome. Manage galleries, bookings, and orders.</p>
+<h2>Admin Dashboard</h2>
 
 <h3>Create Gallery Code</h3>
 <input id="newCode">
 <button onclick="createGallery()">Create</button>
 
-<h3>Upload Photo to Code</h3>
+<h3>Upload Photo</h3>
 <input id="uploadCode">
 <input type="file" id="file">
 <button onclick="upload()">Upload</button>
@@ -175,190 +198,131 @@ input,textarea{
 
 <script>
 
-/* =========================
-NAVIGATION (FIXED)
-========================= */
-
-function go(page){
+/* NAV */
+function go(p){
     document.getElementById("home").style.display="none";
-    document.querySelectorAll(".page").forEach(p=>p.style.display="none");
-    document.getElementById(page).style.display="block";
+    document.querySelectorAll(".page").forEach(x=>x.style.display="none");
+    document.getElementById(p).style.display="block";
 }
 
 function back(){
-    document.querySelectorAll(".page").forEach(p=>p.style.display="none");
+    document.querySelectorAll(".page").forEach(x=>x.style.display="none");
     document.getElementById("home").style.display="block";
 }
 
-/* =========================
-ADMIN LOGIN
-========================= */
-
+/* LOGIN */
 function login(){
-    if(document.getElementById("pass").value==="Cambros2025"){
-        document.getElementById("loginBox").style.display="none";
-        document.getElementById("panel").style.display="block";
+    if(pass.value==="Cambros2025"){
+        loginBox.style.display="none";
+        panel.style.display="block";
         loadAdmin();
     } else alert("Wrong password");
 }
 
-/* FULL LOGOUT FIX */
+/* LOGOUT FIXED */
 function logout(){
+    panel.style.display="none";
+    loginBox.style.display="block";
 
-    // reset admin UI
-    document.getElementById("panel").style.display="none";
-    document.getElementById("loginBox").style.display="block";
-
-    // clear inputs
-    document.getElementById("pass").value="";
-
-    // go home
+    pass.value="";
     back();
 }
 
-/* =========================
-GALLERY SYSTEM
-========================= */
-
+/* GALLERY */
 function openGallery(){
+    const code=code.value;
+    let data=JSON.parse(localStorage.getItem(code));
 
-    const code = document.getElementById("code").value;
-    const data = JSON.parse(localStorage.getItem(code));
+    galleryView.innerHTML="";
 
-    const box = document.getElementById("galleryView");
-    box.innerHTML="";
-
-    if(!data || data.length===0){
-        box.innerHTML="No photos found. Make sure code exists and press OPEN.";
-        return;
-    }
+    if(!data){galleryView.innerHTML="No photos";return;}
 
     data.forEach(img=>{
         let i=document.createElement("img");
         i.src=img;
-
-        // CLICK PHOTO → OPEN ORDER POPUP
-        i.onclick = ()=>openOrderPopup(img);
-
-        box.appendChild(i);
+        i.onclick=()=>openOrder(img);
+        galleryView.appendChild(i);
     });
 }
 
-/* =========================
-ORDER SYSTEM (PHOTO CLICK)
-========================= */
+/* ORDER */
+let selected="";
 
-let selectedImage = "";
-
-function openOrderPopup(img){
-    selectedImage = img;
-    document.getElementById("popup").style.display="flex";
+function openOrder(img){
+    selected=img;
+    popup.style.display="flex";
 }
 
 function closePopup(){
-    document.getElementById("popup").style.display="none";
+    popup.style.display="none";
 }
 
 function submitOrder(){
-
-    const name=document.getElementById("orderName").value;
-    const email=document.getElementById("orderEmail").value;
-    const phone=document.getElementById("orderPhone").value;
-
-    if(!name || !email || !phone){
-        alert("Fill all fields");
-        return;
-    }
-
-    let orders = JSON.parse(localStorage.getItem("orders")) || [];
+    let orders=JSON.parse(localStorage.getItem("orders"))||[];
 
     orders.push({
-        name,email,phone,image:selectedImage
+        name:orderName.value,
+        email:orderEmail.value,
+        phone:orderPhone.value,
+        image:selected
     });
 
     localStorage.setItem("orders",JSON.stringify(orders));
 
-    alert("Order placed!");
-
+    alert("Order placed");
     closePopup();
 }
 
-/* =========================
-BOOKINGS
-========================= */
-
+/* BOOKING */
 function submitBooking(){
+    let b=JSON.parse(localStorage.getItem("bookings"))||[];
 
-    const name=bname.value;
-    const email=bemail.value;
-    const phone=bphone.value;
+    b.push({
+        name:bname.value,
+        email:bemail.value,
+        phone:bphone.value
+    });
 
-    let bookings = JSON.parse(localStorage.getItem("bookings")) || [];
+    localStorage.setItem("bookings",JSON.stringify(b));
 
-    bookings.push({name,email,phone});
-
-    localStorage.setItem("bookings",JSON.stringify(bookings));
-
-    msg.innerText="Booking submitted!";
+    msg.innerText="Booking sent";
 }
 
-/* =========================
-ADMIN DATA
-========================= */
-
+/* ADMIN */
 function loadAdmin(){
+    let b=JSON.parse(localStorage.getItem("bookings"))||[];
+    let o=JSON.parse(localStorage.getItem("orders"))||[];
 
-    let bookings = JSON.parse(localStorage.getItem("bookings")) || [];
-    let orders = JSON.parse(localStorage.getItem("orders")) || [];
+    bookings.innerHTML=b.map(x=>`
+    <div class="card">${x.name}<br>${x.email}<br>${x.phone}</div>
+    `).join("");
 
-    document.getElementById("bookings").innerHTML =
-    bookings.map(b=>
-        `<div class="card">
-        ${b.name}<br>${b.email}<br>${b.phone}
-        </div>`
-    ).join("");
-
-    document.getElementById("orders").innerHTML =
-    orders.map(o=>
-        `<div class="card">
-        ${o.name}<br>${o.email}<br>${o.phone}<br>
-        <small>Image attached</small>
-        </div>`
-    ).join("");
+    orders.innerHTML=o.map(x=>`
+    <div class="card">${x.name}<br>${x.email}<br>${x.phone}<br>Image attached</div>
+    `).join("");
 }
 
-/* =========================
-CREATE / UPLOAD (LOCAL DEMO)
-========================= */
-
+/* GALLERY CREATE */
 function createGallery(){
-    const code = newCode.value;
-    localStorage.setItem(code,JSON.stringify([]));
-    alert("Gallery created: "+code);
+    localStorage.setItem(newCode.value,JSON.stringify([]));
+    alert("Created");
 }
 
+/* UPLOAD */
 function upload(){
+    let file=document.getElementById("file").files[0];
+    let code=document.getElementById("uploadCode").value;
 
-    const file = document.getElementById("file").files[0];
-    const code = document.getElementById("uploadCode").value;
+    let r=new FileReader();
 
-    if(!file || !code){
-        alert("Missing file or code");
-        return;
-    }
-
-    let reader = new FileReader();
-
-    reader.onload = function(e){
-
-        let data = JSON.parse(localStorage.getItem(code)) || [];
-        data.push(e.target.result);
-        localStorage.setItem(code,JSON.stringify(data));
-
-        alert("Uploaded to " + code);
+    r.onload=e=>{
+        let d=JSON.parse(localStorage.getItem(code))||[];
+        d.push(e.target.result);
+        localStorage.setItem(code,JSON.stringify(d));
+        alert("Uploaded");
     };
 
-    reader.readAsDataURL(file);
+    r.readAsDataURL(file);
 }
 
 </script>
