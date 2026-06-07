@@ -1,1 +1,204 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
 
+body{
+    background:#0a0a0a;
+    color:white;
+}
+
+.hero{
+    min-height:70vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    padding:40px;
+    background:linear-gradient(135deg,#000,#1a1a1a);
+}
+
+.hero h1{
+    font-size:4rem;
+    margin-bottom:10px;
+}
+
+.hero p{
+    font-size:1.2rem;
+    opacity:.8;
+    margin-bottom:30px;
+}
+
+.hero-buttons{
+    display:flex;
+    flex-wrap:wrap;
+    gap:15px;
+    justify-content:center;
+}
+
+button{
+    background:white;
+    color:black;
+    border:none;
+    padding:12px 20px;
+    border-radius:12px;
+    cursor:pointer;
+    font-weight:bold;
+    transition:.2s;
+}
+
+button:hover{
+    transform:translateY(-2px);
+}
+
+main{
+    max-width:1400px;
+    margin:auto;
+    padding:30px;
+}
+
+.page{
+    display:none;
+}
+
+.active{
+    display:block;
+}
+
+input,
+textarea{
+    width:100%;
+    padding:14px;
+    margin:10px 0;
+    border:none;
+    border-radius:12px;
+    background:#1d1d1d;
+    color:white;
+}
+
+textarea{
+    min-height:120px;
+}
+
+.adminTabs{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-bottom:25px;
+}
+
+.tab{
+    display:none;
+}
+
+.activeTab{
+    display:block;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+}
+
+.statCard{
+    background:#171717;
+    border-radius:16px;
+    padding:25px;
+    text-align:center;
+}
+
+.statCard h3{
+    font-size:2rem;
+    margin-bottom:10px;
+}
+
+#galleryList{
+    margin-top:25px;
+}
+
+.galleryCard{
+    background:#171717;
+    padding:20px;
+    border-radius:16px;
+    margin-bottom:15px;
+}
+
+.galleryHeader{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.galleryPhotos{
+    margin-top:20px;
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+    gap:15px;
+}
+
+.galleryPhotos img{
+    width:100%;
+    border-radius:12px;
+}
+
+#portfolioGrid,
+#portfolioAdminGrid{
+    margin-top:20px;
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+    gap:20px;
+}
+
+#portfolioGrid img,
+#portfolioAdminGrid img{
+    width:100%;
+    border-radius:16px;
+}
+
+#eventsContainer,
+#adminEvents,
+#ordersContainer,
+#bookingsContainer{
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+}
+
+.card{
+    background:#171717;
+    border-radius:16px;
+    padding:20px;
+}
+
+footer{
+    text-align:center;
+    padding:30px;
+    margin-top:50px;
+    border-top:1px solid #222;
+}
+
+.orderPhoto{
+    width:120px;
+    border-radius:10px;
+}
+
+@media(max-width:768px){
+
+    .hero h1{
+        font-size:2.5rem;
+    }
+
+    .hero-buttons{
+        flex-direction:column;
+        width:100%;
+    }
+
+    .hero-buttons button{
+        width:100%;
+    }
+
+}
