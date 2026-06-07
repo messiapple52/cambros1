@@ -1,1 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cam Bros Photography</title>
 
+<link rel="stylesheet" href="style.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script defer src="app.js"></script>
+</head>
+
+<body>
+
+<header class="hero">
+    <h1>Cam Bros Photography</h1>
+    <p>Professional Sports Photography</p>
+
+    <div class="hero-buttons">
+        <button onclick="showSection('photos')">Our Photos</button>
+        <button onclick="showSection('events')">Events</button>
+        <button onclick="showSection('gallery')">Find My Photos</button>
+        <button onclick="showSection('booking')">Book a Shoot</button>
+        <button onclick="showSection('adminLogin')">Admin</button>
+    </div>
+</header>
+
+<main>
+
+<section id="homeSection" class="page active">
+    <h2>Welcome</h2>
+    <p>Capturing elite sporting moments across Australia.</p>
+</section>
+
+<section id="photosSection" class="page">
+    <h2>Our Photos</h2>
+
+    <div id="portfolioGrid"></div>
+</section>
+
+<section id="eventsSection" class="page">
+    <h2>Upcoming Events</h2>
+
+    <div id="eventsContainer"></div>
+</section>
+
+<section id="gallerySection" class="page">
+
+    <h2>Find My Photos</h2>
+
+    <input id="galleryCode"
+           placeholder="Enter Gallery Code">
+
+    <button onclick="openGallery()">
+        Open Gallery
+    </button>
+
+    <div id="galleryPhotos"></div>
+
+</section>
+
+<section id="bookingSection" class="page">
+
+    <h2>Book a Shoot</h2>
+
+    <form id="bookingForm">
+
+        <input id="bookName" placeholder="Name" required>
+
+        <input id="bookEmail" placeholder="Email" required>
+
+        <input id="bookPhone" placeholder="Phone" required>
+
+        <input id="bookSport" placeholder="Sport">
+
+        <input id="bookEvent" placeholder="Event">
+
+        <input id="bookDate" type="date">
+
+        <textarea id="bookNotes"
+                  placeholder="Notes"></textarea>
+
+        <button type="submit">
+            Submit Booking
+        </button>
+
+    </form>
+
+</section>
+
+<section id="adminLoginSection" class="page">
+
+    <h2>Admin Login</h2>
+
+    <input type="password"
+           id="adminPassword"
+           placeholder="Password">
+
+    <button onclick="adminLogin()">
+        Login
+    </button>
+
+</section>
+
+<section id="adminPanel" class="page">
+
+    <div class="adminTabs">
+
+        <button onclick="openTab('dashboardTab')">
+            Dashboard
+        </button>
+
+        <button onclick="openTab('galleriesTab')">
+            Galleries
+        </button>
+
+        <button onclick="openTab('ordersTab')">
+            Orders
+        </button>
+
+        <button onclick="openTab('bookingsTab')">
+            Bookings
+        </button>
+
+        <button onclick="openTab('eventsTab')">
+            Events
+        </button>
+
+        <button onclick="openTab('portfolioTab')">
+            Our Photos
+        </button>
+
+        <button onclick="openTab('settingsTab')">
+            Settings
+        </button>
+
+        <button onclick="logoutAdmin()">
+            Logout
+        </button>
+
+    </div>
+
+    <div id="dashboardTab" class="tab activeTab">
+
+        <h2>Dashboard</h2>
+
+        <div class="stats">
+
+            <div class="statCard">
+                <h3 id="galleryCount">0</h3>
+                <p>Galleries</p>
+            </div>
+
+            <div class="statCard">
+                <h3 id="photoCount">0</h3>
+                <p>Photos</p>
+            </div>
+
+            <div class="statCard">
+                <h3 id="orderCount">0</h3>
+                <p>Orders</p>
+            </div>
+
+            <div class="statCard">
+                <h3 id="bookingCount">0</h3>
+                <p>Bookings</p>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div id="galleriesTab" class="tab">
+
+        <h2>Create Gallery</h2>
+
+        <input id="clientName"
+               placeholder="Client Name">
+
+        <button onclick="createGallery()">
+            Create Gallery
+        </button>
+
+        <div id="galleryList"></div>
+
+    </div>
+
+    <div id="ordersTab" class="tab">
+
+        <h2>Orders</h2>
+
+        <div id="ordersContainer"></div>
+
+    </div>
+
+    <div id="bookingsTab" class="tab">
+
+        <h2>Bookings</h2>
+
+        <div id="bookingsContainer"></div>
+
+    </div>
+
+    <div id="eventsTab" class="tab">
+
+        <h2>Events</h2>
+
+        <input id="eventTitle" placeholder="Title">
+        <input id="eventDate" type="date">
+        <input id="eventLocation" placeholder="Location">
+
+        <button onclick="addEvent()">
+            Add Event
+        </button>
+
+        <div id="adminEvents"></div>
+
+    </div>
+
+    <div id="portfolioTab" class="tab">
+
+        <h2>Our Photos</h2>
+
+        <input type="file"
+               id="portfolioUpload"
+               multiple>
+
+        <button onclick="uploadPortfolioPhotos()">
+            Upload
+        </button>
+
+        <div id="portfolioAdminGrid"></div>
+
+    </div>
+
+    <div id="settingsTab" class="tab">
+
+        <h2>Settings</h2>
+
+        <p>Password:</p>
+
+        <strong>Cambros2025</strong>
+
+    </div>
+
+</section>
+
+</main>
+
+<footer>
+    <p>Cam Bros Photography</p>
+    <p>cambros26@gmail.com</p>
+</footer>
+
+</body>
+</html>
