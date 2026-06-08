@@ -261,3 +261,413 @@ async function loadGalleries(){
     });
 
 }
+// =========================
+// DASHBOARD STATS
+// =========================
+
+async function loadDashboard(){
+
+    try{
+
+        const galleries =
+        await supabase
+        .from("galleries")
+        .select("*",{count:"exact",head:true});
+
+        const photos =
+        await supabase
+        .from("photos")
+        .select("*",{count:"exact",head:true});
+
+        const bookings =
+        await supabase
+        .from("bookings")
+        .select("*",{count:"exact",head:true});
+
+        const orders =
+        await supabase
+        .from("orders")
+        .select("*",{count:"exact",head:true});
+
+        document.getElementById("galleryCount").innerText =
+            galleries.count || 0;
+
+        document.getElementById("photoCount").innerText =
+            photos.count || 0;
+
+        document.getElementById("bookingCount").innerText =
+            bookings.count || 0;
+
+        document.getElementById("orderCount").innerText =
+            orders.count || 0;
+
+    }catch(err){
+
+        console.log(err);
+
+    }
+
+}
+
+// =========================
+// BOOKINGS
+// =========================
+
+const bookingForm =
+document.getElementById("bookingForm");
+
+if(bookingForm){
+
+    bookingForm.addEventListener(
+        "submit",
+        async function(e){
+
+            e.preventDefault();
+
+            const booking = {
+
+                name:
+                document.getElementById("bookName").value,
+
+                email:
+                document.getElementById("bookEmail").value,
+
+                phone:
+                document.getElementById("bookPhone").value,
+
+                sport:
+                document.getElementById("bookSport").value,
+
+                event:
+                document.getElementById("bookEvent").value,
+
+                date:
+                document.getElementById("bookDate").value,
+
+                notes:
+                document.getElementById("bookNotes").value
+
+            };
+
+            const {error} =
+            await supabase
+            .from("bookings")
+            .insert([booking]);
+
+            if(error){
+
+                alert(error.message);
+
+                return;
+            }
+
+            alert(
+                "Booking Submitted"
+            );
+
+            bookingForm.reset();
+
+        }
+    );
+
+}
+
+// =========================
+// LOAD BOOKINGS
+// =========================
+
+async function loadBookings(){
+
+    const container =
+    document.getElementById(
+        "bookingsContainer"
+    );
+
+    if(!container){
+        return;
+    }
+
+    const {data,error} =
+    await supabase
+    .from("bookings")
+    .select("*")
+    .order(
+        "created_at",
+        {ascending:false}
+    );
+
+    if(error){
+        return;
+    }
+
+    container.innerHTML="";
+
+    data.forEach(item=>{
+
+        container.innerHTML += `
+        <div class="card">
+
+            <h3>${item.name}</h3>
+
+            <p><strong>Email:</strong>
+            ${item.email}</p>
+
+            <p><strong>Phone:</strong>
+            ${item.phone}</p>
+
+            <p><strong>Sport:</strong>
+            ${item.sport}</p>
+
+            <p><strong>Event:</strong>
+            ${item.event}</p>
+
+            <p><strong>Date:</strong>
+            ${item.date}</p>
+
+            <p><strong>Notes:</strong>
+            ${item.notes || ""}</p>
+
+        </div>
+        `;
+
+    });
+
+}
+
+// =========================
+// ORDERS
+// =========================
+
+async function loadOrders(){
+
+    const container =
+    document.getElementById(
+        "ordersContainer"
+    );
+
+    if(!container){
+        return;
+    }
+
+    const {data,error} =
+    await supabase
+    .from("orders")
+    .select("*")
+    .order(
+        "created_at",
+        {ascending:false}
+    );
+
+    if(error){
+        return;
+    }
+
+    container.innerHTML="";
+
+    data.forEach(order=>{
+
+        container.innerHTML += `
+        <div class="card">
+
+            <h3>${order.name}</h3>
+
+            <p><strong>Email:</strong>
+            ${order.email}</p>
+
+            <p><strong>Phone:</strong>
+            ${order.phone}</p>
+
+            <p><strong>Gallery:</strong>
+            ${order.gallery_code}</p>
+
+            <p><strong>Photos:</strong>
+            ${order.photos}</p>
+
+        </div>
+        `;
+
+    });
+
+}
+
+// =========================
+// EVENTS
+// =========================
+
+async function addEvent(){
+
+    const title =
+    document.getElementById(
+        "eventTitle"
+    ).value;
+
+    const date =
+    document.getElementById(
+        "eventDate"
+    ).value;
+
+    const location =
+    document.getElementById(
+        "eventLocation"
+    ).value;
+
+    const {error} =
+    await supabase
+    .from("events")
+    .insert([
+        {
+            title,
+            date,
+            location
+        }
+    ]);
+
+    if(error){
+
+        alert(error.message);
+
+        return;
+
+    }
+
+    loadEvents();
+
+}
+
+async function loadEvents(){
+
+    const publicEvents =
+    document.getElementById(
+        "eventsContainer"
+    );
+
+    const adminEvents =
+    document.getElementById(
+        "adminEvents"
+    );
+
+    const {data,error} =
+    await supabase
+    .from("events")
+    .select("*")
+    .order(
+        "date",
+        {ascending:true}
+    );
+
+    if(error){
+        return;
+    }
+
+    if(publicEvents){
+        publicEvents.innerHTML="";
+    }
+
+    if(adminEvents){
+        adminEvents.innerHTML="";
+    }
+
+    data.forEach(event=>{
+
+        const html = `
+        <div class="card">
+
+            <h3>${event.title}</h3>
+
+            <p>${event.date}</p>
+
+            <p>${event.location}</p>
+
+        </div>
+        `;
+
+        if(publicEvents){
+            publicEvents.innerHTML += html;
+        }
+
+        if(adminEvents){
+            adminEvents.innerHTML += html;
+        }
+
+    });
+
+}
+
+// =========================
+// PORTFOLIO
+// =========================
+
+async function loadPortfolio(){
+
+    const {data,error} =
+    await supabase
+    .from("portfolio")
+    .select("*")
+    .order(
+        "created_at",
+        {ascending:false}
+    );
+
+    if(error){
+        return;
+    }
+
+    const grid =
+    document.getElementById(
+        "portfolioGrid"
+    );
+
+    const adminGrid =
+    document.getElementById(
+        "portfolioAdminGrid"
+    );
+
+    if(grid){
+        grid.innerHTML="";
+    }
+
+    if(adminGrid){
+        adminGrid.innerHTML="";
+    }
+
+    data.forEach(photo=>{
+
+        const img = `
+        <img src="${photo.url}">
+        `;
+
+        if(grid){
+            grid.innerHTML += img;
+        }
+
+        if(adminGrid){
+            adminGrid.innerHTML += img;
+        }
+
+    });
+
+}
+
+// =========================
+// STARTUP
+// =========================
+
+window.addEventListener(
+    "load",
+    ()=>{
+
+        loadEvents();
+        loadPortfolio();
+
+        if(
+            localStorage.getItem(
+                "camBrosAdmin"
+            )==="true"
+        ){
+
+            adminLogin();
+
+        }
+
+    }
+);
