@@ -4,6 +4,7 @@
 // =========================
 
 const ADMIN_PASSWORD = "Cambros2025";
+const db = window.db;
 
 // -------------------------
 // PAGE NAVIGATION
