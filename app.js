@@ -251,15 +251,15 @@ async function loadGalleries(){
 
     data.forEach(gallery=>{
 
-        galleryList.innerHTML += `
-            <div class="galleryCard">
-                <div class="galleryHeader">
-                    <h3>${gallery.code}</h3>
-                </div>
+    galleryList.innerHTML += `
+        <div class="galleryCard">
+            <div class="galleryHeader">
+                <h3>${gallery.code}</h3>
             </div>
-        `;
+        </div>
+    `;
 
-    });
+});
 
 }
 // =========================
