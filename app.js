@@ -672,3 +672,6 @@ window.addEventListener(
 
     }
 );
+function openGallery(){
+    alert("Gallery system not built yet.");
+}
