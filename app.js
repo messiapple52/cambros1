@@ -675,3 +675,6 @@ window.addEventListener(
 function openGallery(){
     alert("Gallery system not built yet.");
 }
+function uploadPortfolioPhotos(){
+    alert("Portfolio uploads not built yet.");
+}
