@@ -231,7 +231,7 @@ async function loadGalleries(){
         "Loading Galleries...";
 
     const {data,error} =
-        await supabase
+        await db
         .from("galleries")
         .select("*")
         .order(
