@@ -185,7 +185,7 @@ async function createGallery(){
         generateCode(name);
 
     const {error} =
-        await supabase
+        await db
         .from("galleries")
         .insert([
             {
