@@ -271,22 +271,22 @@ async function loadDashboard(){
     try{
 
         const galleries =
-        await supabase
+        await db
         .from("galleries")
         .select("*",{count:"exact",head:true});
 
         const photos =
-        await supabase
+        await db
         .from("photos")
         .select("*",{count:"exact",head:true});
 
         const bookings =
-        await supabase
+        await db
         .from("bookings")
         .select("*",{count:"exact",head:true});
 
         const orders =
-        await supabase
+        await db
         .from("orders")
         .select("*",{count:"exact",head:true});
 
