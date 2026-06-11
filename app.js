@@ -351,7 +351,7 @@ if(bookingForm){
             };
 
             const {error} =
-            await supabase
+            await db
             .from("bookings")
             .insert([booking]);
 
@@ -389,7 +389,7 @@ async function loadBookings(){
     }
 
     const {data,error} =
-    await supabase
+    await db
     .from("bookings")
     .select("*")
     .order(
