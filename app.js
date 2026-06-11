@@ -548,7 +548,7 @@ async function loadEvents(){
     );
 
     const {data,error} =
-    await supabase
+    await db
     .from("events")
     .select("*")
     .order(
@@ -601,7 +601,7 @@ async function loadEvents(){
 async function loadPortfolio(){
 
     const {data,error} =
-    await supabase
+    await db
     .from("portfolio")
     .select("*")
     .order(
