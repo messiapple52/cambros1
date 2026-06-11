@@ -451,7 +451,7 @@ async function loadOrders(){
     }
 
     const {data,error} =
-    await supabase
+    await db
     .from("orders")
     .select("*")
     .order(
@@ -513,7 +513,7 @@ async function addEvent(){
     ).value;
 
     const {error} =
-    await supabase
+    await db
     .from("events")
     .insert([
         {
