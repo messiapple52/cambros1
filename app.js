@@ -5,8 +5,21 @@
 
 let ADMIN_PASSWORD = "loading...";
 const db = window.db;
+let ADMIN_PASSWORD = "";
 
-// -------------------------
+async function loadAdminPassword(){
+
+    const {data,error} =
+        await db
+        .from("settings")
+        .select("*")
+        .eq("key","admin_value")
+        .single();
+
+    if(!error && data){
+        ADMIN_PASSWORD = data.value;
+    }
+}// -------------------------
 // PAGE NAVIGATION
 // -------------------------
 
