@@ -325,6 +325,8 @@ if(bookingForm){
 
             e.preventDefault();
 
+            alert("booking started");
+
             const booking = {
 
                 name:
