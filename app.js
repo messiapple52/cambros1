@@ -430,6 +430,10 @@ async function loadBookings(){
             <p><strong>Notes:</strong>
             ${item.notes || ""}</p>
 
+            <button onclick="deleteBooking(${item.id})">
+Delete Booking
+</button>
+
         </div>
         `;
 
