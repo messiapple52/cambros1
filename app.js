@@ -675,6 +675,7 @@ async function loadPortfolio(){
 window.addEventListener(
     "load",
     ()=>{
+        loadAdminPassword();
 
         loadEvents();
         loadPortfolio();
