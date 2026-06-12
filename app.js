@@ -684,3 +684,19 @@ function openGallery(){
 function uploadPortfolioPhotos(){
     alert("Portfolio uploads not built yet.");
 }
+
+async function deleteBooking(id){
+
+    const { error } =
+    await db
+    .from("bookings")
+    .delete()
+    .eq("id", id);
+
+    if(error){
+        alert(error.message);
+        return;
+    }
+
+    loadBookings();
+}
