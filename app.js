@@ -60,7 +60,7 @@ function adminLogin(){
         .getElementById("adminPassword")
         .value;
 
-    if(password===ADMIN_PASSWORD){
+    if(password === window.ADMIN_PASSWORD){
 
         document
             .querySelectorAll(".page")
