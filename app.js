@@ -3,7 +3,6 @@
 // APP.JS V1
 // =========================
 
-let ADMIN_PASSWORD = "loading...";
 const db = window.db;
 let ADMIN_PASSWORD = "";
 
