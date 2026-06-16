@@ -271,7 +271,13 @@ if(gallerySelect){
     </option>`;
 
 }
-    data.forEach(gallery=>{
+    data.forEach(gallery=>{if(gallerySelect){
+
+    gallerySelect.innerHTML += `
+    <option value="${gallery.code}">
+        ${gallery.code}
+    </option>`;
+}
 
     galleryList.innerHTML += `
         <div class="galleryCard">
