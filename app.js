@@ -729,3 +729,14 @@ async function deleteBooking(id){
 
     loadBookings();
 }
+function showSection(id){
+
+    document.querySelectorAll(".page").forEach(page=>{
+        page.classList.remove("active");
+    });
+
+    const section = document.getElementById(id + "Section");
+    if(section){
+        section.classList.add("active");
+    }
+}
