@@ -16,8 +16,9 @@ async function loadAdminPassword(){
         .single();
 
     if(!error && data){
-        ADMIN_PASSWORD = data.value;
+        window.ADMIN_PASSWORD = data.value;
     }
+}
 }// -------------------------
 // PAGE NAVIGATION
 // -------------------------
