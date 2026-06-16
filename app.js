@@ -4,7 +4,6 @@
 // =========================
 
 const db = window.db;
-let ADMIN_PASSWORD = "";
 
 async function loadAdminPassword(){
 
