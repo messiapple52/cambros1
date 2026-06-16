@@ -260,7 +260,17 @@ async function loadGalleries(){
     }
 
     galleryList.innerHTML="";
+const gallerySelect =
+document.getElementById("galleryCode");
 
+if(gallerySelect){
+
+    gallerySelect.innerHTML =
+    `<option value="">
+        Select Gallery
+    </option>`;
+
+}
     data.forEach(gallery=>{
 
     galleryList.innerHTML += `
