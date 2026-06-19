@@ -12,11 +12,12 @@ async function loadAdminPassword(){
         await db
         .from("settings")
         .select("*")
-        .eq("key","admin_value")
-        .single();
+        .eq("key","admin_value");
 
-    if(!error && data){
-        window.ADMIN_PASSWORD = data.value;
+    console.log(data, error);
+
+    if(data && data.length > 0){
+        window.ADMIN_PASSWORD = data[0].value;
     }
 }
 // -------------------------
