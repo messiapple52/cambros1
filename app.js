@@ -1,3 +1,4 @@
+alert("app.js loaded");
 // =========================
 // CAM BROS PHOTOGRAPHY
 // APP.JS V1
