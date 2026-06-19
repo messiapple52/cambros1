@@ -692,7 +692,9 @@ async function loadPortfolio(){
 window.addEventListener(
     "load",
     ()=>{
-        loadAdminPassword();
+        loadAdminPassword().then(() => {
+    console.log("admin password loaded");
+});
 
         loadEvents();
         loadPortfolio();
