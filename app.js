@@ -19,7 +19,7 @@ async function loadAdminPassword(){
         window.ADMIN_PASSWORD = data.value;
     }
 }
-}// -------------------------
+// -------------------------
 // PAGE NAVIGATION
 // -------------------------
 
