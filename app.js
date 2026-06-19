@@ -67,24 +67,32 @@ function showSection(section){
 // ADMIN LOGIN
 // -------------------------
 
-function adminLogin(){
+async function adminLogin(){
 
     const password =
-        document
-        .getElementById("adminPassword")
-        .value;
+        document.getElementById("adminPassword").value;
 
-    if(password === window.ADMIN_PASSWORD){
+    const {data,error} =
+        await db
+        .from("settings")
+        .select("value")
+        .eq("key","admin_value")
+        .single();
 
-        document
-            .querySelectorAll(".page")
-            .forEach(page=>{
-                page.classList.remove("active");
-            });
+    if(error || !data){
+        alert("Cannot load admin password");
+        return;
+    }
 
-        document
-            .getElementById("adminPanel")
-            .classList.add("active");
+    const realPassword = data.value;
+
+    if(password === realPassword){
+
+        document.querySelectorAll(".page").forEach(page=>{
+            page.classList.remove("active");
+        });
+
+        document.getElementById("adminPanel").classList.add("active");
 
         openTab("dashboardTab");
 
@@ -95,11 +103,12 @@ function adminLogin(){
         loadEvents();
         loadPortfolio();
 
-        localStorage.setItem(
-            "camBrosAdmin",
-            "true"
-        );
+        localStorage.setItem("camBrosAdmin","true");
 
+    } else {
+        alert("Incorrect Password");
+    }
+}
     }else{
 
         alert(
