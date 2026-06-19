@@ -67,26 +67,12 @@ function showSection(section){
 // ADMIN LOGIN
 // -------------------------
 
-async function adminLogin(){
+function adminLogin(){
 
     const password =
         document.getElementById("adminPassword").value;
 
-    const {data,error} =
-        await db
-        .from("settings")
-        .select("value")
-        .eq("key","admin_value")
-        .single();
-
-    if(error || !data){
-        alert("Cannot load admin password");
-        return;
-    }
-
-    const realPassword = data.value;
-
-    if(password === realPassword){
+    if(password === "Cambros2025"){
 
         document.querySelectorAll(".page").forEach(page=>{
             page.classList.remove("active");
@@ -107,14 +93,6 @@ async function adminLogin(){
 
     } else {
         alert("Incorrect Password");
-    }
-}
-    }else{
-
-        alert(
-            "Incorrect Password"
-        );
-
     }
 }
 
